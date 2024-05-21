@@ -2,7 +2,10 @@ package com.kotuko.usermanagementsystem.user.service;
 
 import com.kotuko.usermanagementsystem.config.KotukoException;
 import com.kotuko.usermanagementsystem.user.dto.request.UserRequest;
+import com.kotuko.usermanagementsystem.user.dto.request.UserSignInRequest;
+import com.kotuko.usermanagementsystem.user.dto.response.SignInResponse;
 import com.kotuko.usermanagementsystem.user.dto.response.UserResponse;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -21,4 +24,6 @@ public interface UserService {
     UserResponse updateUser(String id, UserRequest request) throws KotukoException;
 
     String deleteUser(String id) throws KotukoException;
+
+    SignInResponse signIn(UserSignInRequest request);
 }

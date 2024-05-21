@@ -8,11 +8,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface IUserDAL extends JpaRepository<User, String> {
 
-    User findByUsernameIgnoreCase(String username);
+    Optional<User> findByUsernameIgnoreCase(String username);
 
     User findByEmailIgnoreCase(String email);
 

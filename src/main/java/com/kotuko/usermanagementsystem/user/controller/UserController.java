@@ -3,6 +3,8 @@ package com.kotuko.usermanagementsystem.user.controller;
 import com.kotuko.usermanagementsystem.config.KotukoException;
 import com.kotuko.usermanagementsystem.config.UmsErrorCodes;
 import com.kotuko.usermanagementsystem.user.dto.request.UserRequest;
+import com.kotuko.usermanagementsystem.user.dto.request.UserSignInRequest;
+import com.kotuko.usermanagementsystem.user.dto.response.SignInResponse;
 import com.kotuko.usermanagementsystem.user.dto.response.UserResponse;
 import com.kotuko.usermanagementsystem.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -98,5 +100,10 @@ public class UserController {
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteUser(@PathVariable String id) throws KotukoException {
         return ResponseEntity.ok(userService.deleteUser(id));
+    }
+
+    @PostMapping(value = "/signIn",consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<SignInResponse> signIn(@RequestBody UserSignInRequest request) {
+        return ResponseEntity.ok(userService.signIn(request));
     }
 }

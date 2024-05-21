@@ -60,12 +60,10 @@ public class JwtService {
             long expiration) {
 
         Optional<User> users = iUserDAL.findByUsernameIgnoreCase(userDetails.getUsername());
-        List<String> authorities = new ArrayList<>();
         if (users.isPresent()) {
             for (Role role : users.get().getRoles()) {
-                extraClaims.put("role", role.getName().replace("ROLE_",""));
+                extraClaims.put("role", role.getName());
             }
-            extraClaims.put("authorities", authorities);
         }
         return Jwts
                 .builder()

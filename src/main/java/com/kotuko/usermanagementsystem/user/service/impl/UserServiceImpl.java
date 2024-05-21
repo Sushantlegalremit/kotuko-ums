@@ -3,6 +3,7 @@ package com.kotuko.usermanagementsystem.user.service.impl;
 import com.kotuko.usermanagementsystem.config.CustomUserDetailsService;
 import com.kotuko.usermanagementsystem.config.JwtService;
 import com.kotuko.usermanagementsystem.config.KotukoException;
+import com.kotuko.usermanagementsystem.user.dal.IRoleDAL;
 import com.kotuko.usermanagementsystem.user.dal.IUserDAL;
 import com.kotuko.usermanagementsystem.user.dto.request.UserRequest;
 import com.kotuko.usermanagementsystem.user.dto.request.UserSignInRequest;
@@ -47,7 +48,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponse createUser(UserRequest request) throws Exception {
-        request.setPassword(passwordEncoder.encode(request.getPassword()));
+        if (request.getPassword() != null)
+            request.setPassword(passwordEncoder.encode(request.getPassword()));
         userValidation.dateOfBirthValidation(request.getDateOfBirth());
         userValidation.emailValidation(request.getEmail());
         userValidation.usernameValidation(request.getUsername());
@@ -95,7 +97,8 @@ public class UserServiceImpl implements UserService {
         Optional<User> user = Optional.ofNullable(iUserDAL.findById(id).orElseThrow(() -> new KotukoException(HttpStatus.NOT_FOUND, "User does not exist")));
 
         if (user.isPresent()) {
-            request.setPassword(passwordEncoder.encode(request.getPassword()));
+            if (request.getPassword() != null)
+                request.setPassword(passwordEncoder.encode(request.getPassword()));
             iUserMapper.toUpdateEntity(request, user.get());
             if (request.getDateOfBirth() != null)
                 userValidation.dateOfBirthValidation(request.getDateOfBirth());
@@ -124,7 +127,6 @@ public class UserServiceImpl implements UserService {
         if (authentication.isAuthenticated()) {
             final UserDetails userDetails = customUserDetailsService.loadUserByUsername(request.getUsername());
             token = jwtService.generateToken(userDetails);
-
         }
         return new SignInResponse(HttpStatus.OK, "Logged In Successfully", token);
     }

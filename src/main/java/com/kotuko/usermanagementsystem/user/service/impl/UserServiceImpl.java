@@ -3,7 +3,6 @@ package com.kotuko.usermanagementsystem.user.service.impl;
 import com.kotuko.usermanagementsystem.config.CustomUserDetailsService;
 import com.kotuko.usermanagementsystem.config.JwtService;
 import com.kotuko.usermanagementsystem.config.KotukoException;
-import com.kotuko.usermanagementsystem.user.dal.IRoleDAL;
 import com.kotuko.usermanagementsystem.user.dal.IUserDAL;
 import com.kotuko.usermanagementsystem.user.dto.request.UserRequest;
 import com.kotuko.usermanagementsystem.user.dto.request.UserSignInRequest;

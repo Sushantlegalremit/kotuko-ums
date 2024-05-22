@@ -65,29 +65,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserResponse> getUsersByFirstName(String firstName, int page, int size) throws KotukoException {
-        User user = iUserDAL.findByFirstNameIgnoreCase(firstName);
-        if (user == null) {
-            throw new KotukoException(HttpStatus.NOT_FOUND, "User not found with firstname: " + firstName);
-        }
+    public List<UserResponse> getUsersByFirstName(String firstName, int page, int size) {
         return iUserMapper.toUserResponseList(iUserDAL.findAllByFirstName(firstName, PageRequest.of(page, size)).stream().toList());
     }
 
     @Override
-    public List<UserResponse> getUsersByLastName(String lastName, int page, int size) throws KotukoException {
-        User user = iUserDAL.findByLastNameIgnoreCase(lastName);
-        if (user == null) {
-            throw new KotukoException(HttpStatus.NOT_FOUND, "User not found with lastname: " + lastName);
-        }
+    public List<UserResponse> getUsersByLastName(String lastName, int page, int size) {
         return iUserMapper.toUserResponseList(iUserDAL.findByLastName(lastName, PageRequest.of(page, size)).stream().toList());
     }
 
     @Override
-    public List<UserResponse> getUsersByEmail(String email, int page, int size) throws KotukoException {
-        User user = iUserDAL.findByEmailIgnoreCase(email);
-        if (user == null) {
-            throw new KotukoException(HttpStatus.NOT_FOUND, "User not found with email: " + email);
-        }
+    public List<UserResponse> getUsersByEmail(String email, int page, int size) {
         return iUserMapper.toUserResponseList(iUserDAL.findAllEmails(email, PageRequest.of(page, size)).stream().toList());
     }
 

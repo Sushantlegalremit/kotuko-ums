@@ -3,6 +3,8 @@ package com.kotuko.usermanagementsystem.user.controller;
 import com.kotuko.usermanagementsystem.config.KotukoException;
 import com.kotuko.usermanagementsystem.config.UmsErrorCodes;
 import com.kotuko.usermanagementsystem.user.dto.request.UserRequest;
+import com.kotuko.usermanagementsystem.user.dto.request.UserSignInRequest;
+import com.kotuko.usermanagementsystem.user.dto.response.SignInResponse;
 import com.kotuko.usermanagementsystem.user.dto.response.UserResponse;
 import com.kotuko.usermanagementsystem.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -10,6 +12,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,6 +33,7 @@ public class UserController {
             @ApiResponse(responseCode = "400", description = UmsErrorCodes.REQUEST_VALIDATION_FAILED),
             @ApiResponse(responseCode = "500", description = UmsErrorCodes.INTERNAL_SERVER_ERROR)})
     @Operation(summary = "User registration ", description = "User Register in ums")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
     public ResponseEntity<UserResponse> createUser(@RequestBody UserRequest request) throws Exception {
         return ResponseEntity.ok(userService.createUser(request));
     }
@@ -39,6 +43,7 @@ public class UserController {
             @ApiResponse(responseCode = "400", description = UmsErrorCodes.REQUEST_VALIDATION_FAILED),
             @ApiResponse(responseCode = "500", description = UmsErrorCodes.INTERNAL_SERVER_ERROR)})
     @Operation(summary = "Get User by user name  ")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping(value = "/{username}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserResponse> getUserByUsername(@PathVariable String username) throws KotukoException {
         return ResponseEntity.ok(userService.getUserByUsername(username));
@@ -49,6 +54,7 @@ public class UserController {
             @ApiResponse(responseCode = "400", description = UmsErrorCodes.REQUEST_VALIDATION_FAILED),
             @ApiResponse(responseCode = "500", description = UmsErrorCodes.INTERNAL_SERVER_ERROR)})
     @Operation(summary = "Get All User by first name ")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping(value = "/first-name/{firstName}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<UserResponse>> getUserByFirstName(@PathVariable String firstName,@RequestParam(value = "size",defaultValue = "10") int size,
                                                                  @RequestParam(value = "page", defaultValue = "0") int page) throws KotukoException {
@@ -60,6 +66,7 @@ public class UserController {
             @ApiResponse(responseCode = "400", description = UmsErrorCodes.REQUEST_VALIDATION_FAILED),
             @ApiResponse(responseCode = "500", description = UmsErrorCodes.INTERNAL_SERVER_ERROR)})
     @Operation(summary = "Get All User by last name ")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping(value = "/last-name/{lastName}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<UserResponse>> getUserByLastName(@PathVariable String lastName,@RequestParam(value = "size",defaultValue = "10") int size,
                                                                 @RequestParam(value = "page", defaultValue = "0") int page) throws KotukoException {
@@ -71,6 +78,7 @@ public class UserController {
             @ApiResponse(responseCode = "400", description = UmsErrorCodes.REQUEST_VALIDATION_FAILED),
             @ApiResponse(responseCode = "500", description = UmsErrorCodes.INTERNAL_SERVER_ERROR)})
     @Operation(summary = "Get All User by email ")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping(value = "/email/{email}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<UserResponse>> getUserByEmail(@PathVariable String email,@RequestParam(value = "size",defaultValue = "10") int size,
                                                              @RequestParam(value = "page", defaultValue = "0") int page) throws KotukoException {
@@ -84,6 +92,7 @@ public class UserController {
             @ApiResponse(responseCode = "400", description = UmsErrorCodes.REQUEST_VALIDATION_FAILED),
             @ApiResponse(responseCode = "500", description = UmsErrorCodes.INTERNAL_SERVER_ERROR)})
     @Operation(summary = "Update User by user id ")
+    @PreAuthorize("hasAnyRole('ROLE_USER')")
     @PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> updateUser(@PathVariable String id, @RequestBody UserRequest request) throws Exception {
         return ResponseEntity.ok(userService.updateUser(id, request));
@@ -95,8 +104,14 @@ public class UserController {
             @ApiResponse(responseCode = "400", description = UmsErrorCodes.REQUEST_VALIDATION_FAILED),
             @ApiResponse(responseCode = "500", description = UmsErrorCodes.INTERNAL_SERVER_ERROR)})
     @Operation(summary = "Delete User by user id ")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteUser(@PathVariable String id) throws KotukoException {
         return ResponseEntity.ok(userService.deleteUser(id));
+    }
+
+    @PostMapping(value = "/signIn",consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<SignInResponse> signIn(@RequestBody UserSignInRequest request) {
+        return ResponseEntity.ok(userService.signIn(request));
     }
 }

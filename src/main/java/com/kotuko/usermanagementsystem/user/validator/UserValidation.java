@@ -41,7 +41,7 @@ public class UserValidation {
         if (username == null)
             throw new KotukoException(HttpStatus.BAD_REQUEST, "Username cannot be null.");
 
-        if (iUserDAL.findByUsernameIgnoreCase(username) != null)
+        if (iUserDAL.findByUsernameIgnoreCase(username).isPresent())
             throw new KotukoException(HttpStatus.BAD_REQUEST, "Username already exists.");
     }
 }

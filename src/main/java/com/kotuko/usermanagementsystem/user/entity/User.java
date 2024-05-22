@@ -1,18 +1,14 @@
 package com.kotuko.usermanagementsystem.user.entity;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.kotuko.usermanagementsystem.config.BaseEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-import jakarta.validation.constraints.Email;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
+import java.util.Set;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -21,15 +17,23 @@ import java.util.Date;
 @Entity
 @Table(name = "users")
 public class User extends BaseEntity {
-    @Column(unique = true, nullable = false, length = 50,name = "username")
+    @Column(unique = true, nullable = false, length = 50, name = "username")
     private String username;
-    @Column(unique = true, nullable = false, length = 50,name = "first_name")
+    @Column( nullable = false, length = 50, name = "first_name")
     private String firstName;
-    @Column(unique = true, nullable = false, length = 50,name = "last_name")
+    @Column( nullable = false, length = 50, name = "last_name")
     private String lastName;
-    @Column(unique = true, nullable = false, length = 50,name = "email")
+    @Column(unique = true, nullable = false, length = 50, name = "email")
     private String email;
-    @Column(unique = true, nullable = false, length = 50,name = "date_of_birth")
+    @Column(unique = true, nullable = false, length = 50, name = "date_of_birth")
     private String dateOfBirth;
+    @Column(name = "password")
+    private String password;
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "user_role",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
+    private Set<Role> roles;
 
 }

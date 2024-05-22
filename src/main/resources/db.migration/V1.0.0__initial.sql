@@ -36,7 +36,6 @@ ALTER TABLE `role`
     ADD PRIMARY KEY (`id`);
 ALTER TABLE `users`
     ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `UK_1vj6kbtboiaeen9hvg7f9v8bk` (`date_of_birth`),
   ADD UNIQUE KEY `UK_6dotkott2kjsp8vw4d0m25fb7` (`email`),
   ADD UNIQUE KEY `UK_r43af9ap4edm43mmtq01oddj6` (`username`);
 
